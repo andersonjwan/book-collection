@@ -1,2 +1,2 @@
 # Compiler Design in C
-Personal solutions and examples to Compiler Desing in C [1st Edition] by Allen Holub.
+Personal solutions and examples to Compiler Design in C [1st Edition] by Allen Holub.
