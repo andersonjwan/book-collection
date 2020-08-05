@@ -17,7 +17,6 @@ statements(void)
   }
   else {
     fprintf(stderr, "%d: Expected semicolon\n", yylineno);
-    fflush(stderr);
   }
 
   if(!match(EOI)) {
@@ -105,11 +104,9 @@ factor(void)
     }
     else {
       fprintf(stderr, "%d: Unmatched parenthesis\n", yylineno);
-      fflush(stderr);
     }
   }
   else {
     fprintf(stderr, "%d: Number or Identifier expected\n", yylineno);
-    fflush(stderr);
   }
 }
