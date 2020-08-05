@@ -77,7 +77,7 @@ factor(void)
     }
   }
   else {
-    fprintf(stderr, "%d: Number of Identifier expected.\n", yylineno);
+    fprintf(stderr, "%d: Number or Identifier expected.\n", yylineno);
   }
 
   return tmpvar;
