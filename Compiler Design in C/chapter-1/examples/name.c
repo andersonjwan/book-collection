@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <stdio.h>
+#include "lex.h"
 
 char *Names[] = { "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7" };
 char **Name_iter = Names;
@@ -15,7 +17,7 @@ new_name(void)
 }
 
 void
-freename(char *s)
+free_name(char *s)
 {
   if(Name_iter > Names) {
     --Name_iter;
