@@ -28,7 +28,7 @@ lex(void)
       // current character is '\0'
       current = input_buffer; // current = first character in line
 
-      if(!gets(input_buffer)) {
+      if(!fgets(input_buffer, 127, stdin)) {
         /* no characters left to read on line */
         *current = '\0';
         return EOI;
