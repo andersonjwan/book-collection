@@ -79,3 +79,23 @@ lex(void)
     }
   }
 }
+
+static int Lookahead = -1;
+
+int
+match(int token)
+{
+  if(Lookahead == -1) {
+    /* first call */
+    Lookahead == lex();
+  }
+
+  return token == Lookahead; // 1 if equivalent, otherwise 0
+}
+
+void
+advance(void)
+{
+  /* advance the Lookahead to the next input symbol */
+  Lookahead = lex();
+}
