@@ -90,8 +90,6 @@ match(int token)
     Lookahead = lex();
   }
 
-  printf("Lookahead = %d\n", Lookahead);
-
   return token == Lookahead; // 1 if equivalent, otherwise 0
 }
 
