@@ -87,8 +87,10 @@ match(int token)
 {
   if(Lookahead == -1) {
     /* first call */
-    Lookahead == lex();
+    Lookahead = lex();
   }
+
+  printf("Lookahead = %d\n", Lookahead);
 
   return token == Lookahead; // 1 if equivalent, otherwise 0
 }
