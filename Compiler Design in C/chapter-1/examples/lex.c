@@ -34,8 +34,6 @@ lex(void)
         return EOI;
       }
 
-      ++yylineno;
-
       // ignore whitespace at the beginning of the line
       while(isspace(*current)) {
         ++current; // increment the pointer to the next character
@@ -43,7 +41,7 @@ lex(void)
     }
 
     for( ; (*current); ++current) {
-      /* get the next token on the line*/
+      /* get the next token on the line */
       yytext = current; // yytext = start of token
       yylen  = 1;
 
@@ -56,7 +54,7 @@ lex(void)
       case ')': return RPAREN ;
 
       /* ignore whitespace */
-      case '\n' :
+      case '\n' : ++yylineno; break;
       case '\t' :
       case ' '  : break;
 
