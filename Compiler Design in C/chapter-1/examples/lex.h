@@ -9,8 +9,13 @@
 #define RPAREN    5     /*     )              */
 #define NUM_ID    6     /* [0-9]* or [Aa-Zz]* */
 
-extern char **yytext;
-extern int    yylen;
-extern int    yylineno;
+extern char *yytext;
+extern int   yylen;
+extern int   yylineno;
+
+/* forward declarations */
+int lex(void);
+int match(int token);
+void advance(void);
 
 #endif
