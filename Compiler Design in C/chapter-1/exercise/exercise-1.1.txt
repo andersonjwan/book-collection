@@ -1,0 +1,10 @@
+/*
+ * Grammar to recognize a set of keywords
+ * variable declarations.
+ */
+
+declaration ::= modifier name;
+modifier    ::= type modifier | type
+type        ::= int | char | long | float | double | signed | unsigned
+                short | const | volatile
+name        ::= ID
