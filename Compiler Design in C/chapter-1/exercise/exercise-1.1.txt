@@ -3,7 +3,7 @@
  * variable declarations.
  */
 
-declaration ::= modifier name;
+declaration ::= modifier name SEMICOLON
 modifier    ::= type modifier | type
 type        ::= int | char | long | float | double | signed | unsigned
                 short | const | volatile
