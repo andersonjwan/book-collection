@@ -1,0 +1,13 @@
+/*
+ * Grammar to recognize legal combinations of C variable
+ * declarations alongside pointers, arrays, pointers to arrays, etc.
+ */
+
+decl ::= spec type name;
+spec ::= volatile | sign | const |
+         volatile sign | sign volatile | volatile const | const volatile |
+         sign const | const sign | volatile sign const | volatile const sign |
+         sign volatile const | sign const volatile | const volatile sign | const sign volatile
+sign ::= signed | unsigned | EPSILON
+type ::= int | char | float | double | long | long long | short | EPSILON
+name ::= ID | ID[NUM] | *ID | **ID | *ID[] | **ID[]
