@@ -20,6 +20,15 @@ extern int   yylineno;
 
 /* forward declaration(s) */
 int  lex(void);
-int  match(void);
+int  match(int);
 void advance(void);
+
+// parse functions
+void parse_sentence(void);
+void parse_subject(void);
+void parse_predicate(void);
+void parse_noun(void);
+void parse_object(void);
+void parse_pointer(void);
+void parse_array(void);
 #endif
