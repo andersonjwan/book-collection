@@ -1,23 +1,26 @@
-/*
- * Grammar English to C;
- *
- * sentence ::= ID is a TYPE.
- */
-
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include "exercise-1.4.h"
 
-/* token types */
-enum Tokens {EOI = 0, ID, NUM, VERB, PERIOD, ARTICLE, TYPE};
+/* English to Declarations Grammar
+ *
+ * <sentence>    ::= <subject> <predicate> .
+ * <subject>     ::= <noun>
+ * <predicate>   ::= VERB ARTICLE <object>
+ * <noun>        ::= ID
+ * <object>      ::= TYPE | <pointer> | <array>
+ * <pointer>     ::= POINTER ARTICLE ARTICLE <object>
+ * <array>       ::= ARRAY <preposition> NUM TYPE
+ * <preposition> ::= OF
+ */
 
-/* forward declarations */
 char *yytext   = "";
-char  yylen    = 0;
-char  yylineno = 0;
+int   yylen    = 0;
+int   yylineno = 0;
 
 int
-lexer(void)
+lex(void)
 {
   static char buffer[256];
   char *current;
@@ -28,12 +31,12 @@ lexer(void)
     while(!(*current)) {
       current = buffer;
 
-      if(!fgets(buffer, 255, stdin)) {
+      if(!fgets(buffer, 256, stdin)) {
         *current = '\0';
         return EOI;
       }
 
-      // ignore whitespace at the beginning of line
+      /* ignore whitespace */
       while(isspace(*current)) {
         ++current;
       }
@@ -48,9 +51,9 @@ lexer(void)
       case '.': return PERIOD;
 
       /* ignore whitespace */
-      case '\n' : ++yylineno; break;
-      case '\t' :
-      case ' '  : break;
+      case '\n': ++yylineno; break;
+      case '\t':
+      case ' ' : break;
 
       default:
         if(isdigit(*current)) {
@@ -58,6 +61,7 @@ lexer(void)
             ++current;
           }
 
+          yylen = current - yytext;
           return NUM;
         }
         else if(isalpha(*current)) {
@@ -67,86 +71,42 @@ lexer(void)
 
           yylen = current - yytext;
 
-          if(strncmp("is", yytext, yylen) == 0) {
+          char lexeme[256];
+          strncpy(lexeme, yytext, yylen);
+          lexeme[yylen] = '\0';
+
+          /* tokenize word */
+          if(strcmp(lexeme, "is") == 0) {
             return VERB;
           }
-          else if(strncmp("a",  yytext, yylen) == 0 ||
-                  strncmp("an", yytext, yylen) == 0) {
-            return ARTICLE;
-          }
-          else if(strncmp("int",   yytext, yylen) == 0 ||
-                  strncmp("char",  yytext, yylen) == 0 ||
-                  strncmp("float", yytext, yylen) == 0 ||
-                  strncmp("pointer", yytext, yylen) == 0) {
+          else if(strcmp(lexeme, "int")   == 0 ||
+                  strcmp(lexeme, "char")  == 0 ||
+                  strcmp(lexeme, "float") == 0) {
             return TYPE;
+          }
+          else if(strcmp(lexeme, "pointer")  == 0 ||
+                  strcmp(lexeme, "pointers") == 0) {
+            return POINTER;
+          }
+          else if(strcmp(lexeme, "array") == 0) {
+            return ARRAY;
+          }
+          else if(strcmp(lexeme, "of") == 0) {
+            return PREPOSITION;
+          }
+          else if(strcmp(lexeme, "a")  == 0 ||
+                  strcmp(lexeme, "an") == 0 ||
+                  strcmp(lexeme, "to") == 0) {
+            return ARTICLE;
           }
           else {
             return ID;
           }
         }
         else {
-          fprintf(stderr, "Ignoring Illegal Character: <%c>\n", *current);
+          return ERROR;
         }
       }
-    }
-  }
-}
-
-static int lookahead = -1;
-
-int
-match(int token) {
-  if(lookahead == -1) {
-    lookahead = lexer();
-  }
-
-  return token == lookahead;
-}
-
-void
-advance(void)
-{
-  lookahead = lexer();
-}
-
-void
-sentence(void)
-{
-
-  while(!match(EOI)) {
-    if(match(ID)) {
-      advance();
-
-      if(match(VERB)) {
-        advance();
-
-        if(match(ARTICLE)) {
-          advance();
-
-          if(match(TYPE)) {
-            advance();
-          }
-          else {
-            fprintf(stderr, "%d: Expected TYPE.\n", yylineno);
-          }
-        }
-        else {
-          fprintf(stderr, "%d: Expected ARTICLE.\n", yylineno);
-        }
-      }
-      else {
-        fprintf(stderr, "%d: Expected VERB.\n", yylineno);
-      }
-    }
-    else {
-      fprintf(stderr, "%d: Expected Identifier.\n", yylineno);
-    }
-
-    if(match(PERIOD)) {
-      advance();
-    }
-    else {
-      fprintf(stderr, "%d: Expected PERIOD.\n", yylineno);
     }
   }
 }
@@ -154,6 +114,13 @@ sentence(void)
 int
 main(void)
 {
-  sentence();
+  int token;
+
+  do {
+    token = lex();
+    printf("LEXEME: %0.*s (%d)\n", yylen, yytext, token);
+  }
+  while(token != EOI);
+
   return 0;
 }
